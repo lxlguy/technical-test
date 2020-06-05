@@ -1,6 +1,7 @@
 #misc
 data_files/
-
+*.asn
+*.bz2
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
