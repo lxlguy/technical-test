@@ -1,5 +1,9 @@
 #misc
-data_files/
+/data_files/*.log
+/data_files/*.gz
+/data_files/*.csv
+/data_files/*.txt
+*.csv
 *.asn
 *.bz2
 # Byte-compiled / optimized / DLL files

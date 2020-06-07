@@ -1,3 +1,11 @@
+"""
+Disclaimer:
+functions ftp_download, 
+            find_latest_in_ftp, 
+            find_latest_routeviews,
+            download_rib_file 
+were modified and copied in from pyasn package's utility scripts folder to download the asn DB.
+"""
 from __future__ import print_function, division
 import pdftotext
 import pandas as pd
@@ -8,7 +16,6 @@ from ftplib import FTP
 from sys import argv, exit, stdout, version_info
 import pyasn
 from pyasn import mrtx
-from sys import argv, exit, stdout
 from glob import glob
 from argparse import ArgumentParser
 from urllib.request import urlopen
@@ -16,14 +23,14 @@ from geolite2 import geolite2
 import os
 import argparse
 
-#note: the ip_pattern does not hold for ip_v6
+#note: the ip_pattern does not hold for ip_v6, only v4
 ip_pattern = re.compile(r"(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\."
                      r"(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\."
                      r"(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\[\.\]"
                      r"(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])")
-
-hash_pattern = re.compile(r"\b([^\W_-]{40})\b") 
-
+#upper case or lower case-only hash is done elsewhere not in regex pattern
+hash_pattern = re.compile(r"\b([^\W_-]{40})\b")  
+#regrettably this url pattern only holds for abc.cde[.]xx, cde[.]xxx, but not xyz.abc.cde[.]xx 
 url_pattern = re.compile(r"\b(([a-zA-Z0-9]{1,63}.)?[^\W_]{1,63}\[\.\][^\W\d_-]{2,3})\b")
 
 def ftp_download(server, remote_dir, remote_file, local_file, print_progress=True):
@@ -76,6 +83,9 @@ def find_latest_in_ftp(server, archive_root, sub_dir, print_progress=True):
 
 
 def find_latest_routeviews(archive_ipv):
+    '''
+    find latest file to download
+    '''
     archive_ipv = str(archive_ipv)
     assert archive_ipv in ('4', '6', '46', '64')
     return find_latest_in_ftp(server='archive.routeviews.org',
@@ -85,6 +95,9 @@ def find_latest_routeviews(archive_ipv):
                               sub_dir='RIBS')
 
 def check_asn_cc(row, asndb, geo):
+    '''
+    retrieve ASN and country code using pyasn and geolite2
+    '''
     if row['ioc_type']=='ip_address':        
         try:
             asn, _ = asndb.lookup(row['value'])
@@ -100,11 +113,17 @@ def check_asn_cc(row, asndb, geo):
         return (None, None)
 
 def download_rib_file():
+    """
+    calls and run function to download asn db
+    """
     srvr, rp, fn = find_latest_routeviews('46')
     ftp_download(srvr, rp, fn, fn)
     return
 
-def verify_asn_database():    
+def verify_asn_database(): 
+    """
+    looks for latest version of ASN file in this folder
+    """   
     if any(item == "asn_{}.asn".format(datetime.today().strftime('%Y%m%d')) for item in os.listdir('.')):    
         print ('latest asn file found') 
         return [item for item in os.listdir('.') if item.endswith('.asn')][0]
@@ -121,6 +140,10 @@ def verify_asn_database():
     return ("asn_{}.asn".format(datetime.today().strftime('%Y%m%d')))  
 
 def extract_ioc(filepath, output_path):
+    """
+    open pdf, applies regex for url, sha-1 hash and ip address, then applies further checks on ip_address if any
+    saves to location output_path
+    """
     try:
         with open(filepath,"rb") as f:
             all_found={}
