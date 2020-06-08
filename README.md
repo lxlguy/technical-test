@@ -1,11 +1,12 @@
 # Technical-test
 
 Setup environment notes:  
-The environment can be replicated by using conda environment.yml file.    
+The environment can be replicated by using the conda environment.yml file included in repo.    
 ```conda env create -f environment.yml```  
-One of the python packages require additional external tools preinstalled:
-External build tools required, on top of enviroment.yml
-Download build tools from https://visualstudio.microsoft.com/visual-cpp-build-tools/  
+__Note:__ One of the python packages might require additional external tools preinstalled if installing on Windows machine, on top of enviroment.yml
+If conda install of environment throws exception, download build tools from https://visualstudio.microsoft.com/visual-cpp-build-tools/  
+Install the following packages:  
+<img src="./assets/installcplusplusbuildtools.png" alt="install c++ build tools" width="600"/>  
 This is required for pyasn library.
 
 ## Test Question
@@ -34,15 +35,27 @@ bedrost[.]com
 ```
 These heuristics are used to create the necessary regexes for pt1. For pt2, there were relevant open source libraries that could support the extraction of ASN and country code.  
 
+The script can be found in ./q1.py.
+
+Example usage:  
+```python q1.py ./data_files/Win32_Industroyer.pdf``` Outputs a csv in pdf folder.  
+```python q1.py ./data_files/Win32_Industroyer.pdf -o ./output.csv``` Defines output location
+
+__Limitations of Approach:__  
+The regex does not work for ipv6 addresses.  
+There could be SHA-256 or MD-5 hashes but since I did not see it being used in those pdfs, they were not included.
+There is a need to occasionally check the pdfs to ensure that there is no information that was missed.
+
 
 ### B. Cyber Threat Analysis  
 Provide a write-up for the following.
 1. From the extracted IOCs, outline the type of enrichments that can facilitate cyber threat investigation.
 2. How would you surface potential additional unknown IOCs from this list of IOCs from the report?  
 
+Response:  
 The IOCs would allow investigators to look at relevant parts of the computer networks, ie traffic logs for the IP addresses and URLs and examine system files for the hashes, thus can more confidently identify the cause of the cyber incident. 
 
-Additional IOCs for the malware could be obtained from threat repositories like ```virustotal.com```. I was able to key in the SHA-1 hash and obtain SHA-256 hashes and other information. A scraping effort could be undertaken to collect these additional information.  
+2. Additional IOCs for the same malware could be obtained from threat repositories like ```virustotal.com```. I noticed that I was able to key in the SHA-1 hash and from the malware information page, obtain SHA-256 hashes and other information. A scraping effort could be undertaken to collect these additional information, and VirusTotal also offers an low-rate API for free users.  
 
 Research links:  
 https://www.securonix.com/data-enrichment-the-key-ingredient-for-siem-success/  
@@ -64,3 +77,11 @@ This additional context can be extremely helpful during the investigation proces
 https://blogs.gartner.com/anton-chuvakin/2014/02/19/how-to-make-better-threat-intelligence-out-of-threat-intelligence-data/
 https://github.com/eCrimeLabs/vt2misp
 https://community.sophos.com/kb/en-us/128136#understanding
+
+### B. Cyber Threat Analysis
+Analytics Development
+1. Design an algorithm to shortlist IPs that could be running reconnaissance activities against an enterprise web server. State any assumption you make in your design. Use the dataset in the following link to develop a prototype of the algorithm.  
+https://www.secrepo.com/maccdc2012/http.log.gz
+
+I made use of a rule-based approach to score users in the dataset, using rules that i feel could pick up suspicious behavior. My answer and limited analysis can be found in EDA_v3.ipynb. (EDA_v3.html as backup file) It makes use of code snippets from /src.
+I did not modularize the code for Q3 because it is highly specific for the given data format, ie column names would be different for each dataset input etc. I also tried to avoid using specific regex for user_agent nor uri because I feel that they're too specific to dataset.

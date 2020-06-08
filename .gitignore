@@ -3,6 +3,7 @@
 /data_files/*.gz
 /data_files/*.csv
 /data_files/*.txt
+/ignore
 *.csv
 *.asn
 *.bz2

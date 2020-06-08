@@ -1,6 +1,9 @@
 import pandas as pd
 import numpy as np
 def get_data():
+    '''
+    avoid importing fields that are not deemed useful
+    '''
     columns=['ts','uid','origin_h','origin_p','response_h','response_p',\
                 'depth','method','host','uri','referrer','user_agent','request_len','response_len',\
                 'status_code','status_msg','info_code','info_msg','filename','tags','username',\
@@ -19,6 +22,9 @@ def get_data():
     return df
 
 def get_raw_data():
+    '''
+    imports everything from log file
+    '''
     columns=['ts','uid','origin_h','origin_p','response_h','response_p',\
                 'depth','method','host','uri','referrer','user_agent','request_len','response_len',\
                 'status_code','status_msg','info_code','info_msg','filename','tags','username',\
@@ -34,6 +40,9 @@ def get_raw_data():
     return df
 
 def describe_df(df):
+    '''
+    does a analysis of modal values from the dataframe, column by column. A variation of df.info()
+    '''
     ans={}
     for col in df.columns:
         col_stats = df[col].value_counts(dropna=False)

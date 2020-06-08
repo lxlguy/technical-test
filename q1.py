@@ -4,7 +4,7 @@ functions ftp_download,
             find_latest_in_ftp, 
             find_latest_routeviews,
             download_rib_file 
-were modified and copied in from pyasn package's utility scripts folder to download the asn DB.
+were modified and copied in from pyasn package's utility scripts folder to download the asn DB, can be found here https://github.com/hadiasghari/pyasn/tree/master/pyasn-utils.
 """
 from __future__ import print_function, division
 import pdftotext
@@ -129,7 +129,7 @@ def verify_asn_database():
         return [item for item in os.listdir('.') if item.endswith('.asn')][0]
     if not any((item.startswith("rib.{}".format(datetime.today().strftime('%Y%m%d'))) \
                and item.endswith('.bz2')) for item in os.listdir('.')):        
-        print('downloading latest rib file') 
+        print('Today\'s version of DB not found. Will be downloading latest definitions from archive.routeviews.org. Downloading and parsing DB will take around 1 min.') 
         download_rib_file()
     rib_file = sorted([item for item in os.listdir('.') if \
                 (item.startswith('rib.{}'.format(datetime.today().strftime('%Y%m%d')))\
@@ -178,6 +178,7 @@ def extract_ioc(filepath, output_path):
         df['page']=key
         resultant_df.append(df)
     master_df= pd.concat(resultant_df)
+    master_df = master_df.drop_duplicates(subset=['value'], keep='last') #notice that ESET-LightNeuron has the same hash defined in 2 places
     if len(master_df[master_df['ioc_type']=='ip_address'])>0: 
         latest_asn = verify_asn_database()
         asndb = pyasn.pyasn(latest_asn) 
@@ -185,12 +186,17 @@ def extract_ioc(filepath, output_path):
         master_df[['asn','country_code']] = master_df.apply(check_asn_cc, args=(asndb, geo), axis=1, result_type="expand")    
     if len(master_df)>0:
         master_df.to_csv(output_path, index=False)
-        print('End of Successful Extraction')
+        print('End of IOC Extraction from pdf. \n {} url, \n {} hash, \n {} ip address \n are found'\
+            .format(len(master_df[master_df['ioc_type']=='url']),\
+                len(master_df[master_df['ioc_type']=='hashes']),\
+                    len(master_df[master_df['ioc_type']=='ip_address'])))
+    else:
+        print("No IOC has been found and extracted.")
     return
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description='Q1 information extract script. Specify file path to begin, ie python q1.py ./data_file/Win32_Industroyer.pdf')
     parser.add_argument("input_path", help="input file path", type=str)
     parser.add_argument("-o","--output", help="(optional) destination file path, default will be same location as input", type=str)
     args = parser.parse_args()
