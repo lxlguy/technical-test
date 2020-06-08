@@ -6,11 +6,11 @@ The environment can be replicated by using the conda environment.yml file includ
 __Note:__ One of the python packages might require additional external tools preinstalled if installing on Windows machine, on top of enviroment.yml
 If conda install of environment throws exception, download build tools from https://visualstudio.microsoft.com/visual-cpp-build-tools/  
 Install the following packages:  
-![](./assets/installcplusplusbuildtools.png?raw=true)
+![](./assets/installcplusplusbuildtools.PNG)
 This is required for pyasn library.
 
-## Test Question
-### A. Automation Scripting  
+# Test Question
+## A. Automation Scripting  
 1. Provide a script to automate the extraction of IP addresses, URLs and hashes from the following cyber threat report.
 “Win32/INDUSTROYER A new threat for industrial control system”
 (https://www.welivesecurity.com/wp-content/uploads/2017/06/Win32_Industroyer.pdf)  
@@ -47,38 +47,25 @@ There could be SHA-256 or MD-5 hashes but since I did not see it being used in t
 There is a need to occasionally check the pdfs to ensure that there is no information that was missed.
 
 
-### B. Cyber Threat Analysis  
+## B. Cyber Threat Analysis  
 Provide a write-up for the following.
 1. From the extracted IOCs, outline the type of enrichments that can facilitate cyber threat investigation.
 2. How would you surface potential additional unknown IOCs from this list of IOCs from the report?  
 
-Response:  
-The IOCs would allow investigators to look at relevant parts of the computer networks, ie traffic logs for the IP addresses and URLs and examine system files for the hashes, thus can more confidently identify the cause of the cyber incident. 
+__Response:__  
+1. The IOCs would allow investigators to look at relevant parts of the computer networks, ie traffic logs for the IP addresses and URLs and examine system files for the hashes, thus can more confidently identify the cause of the cyber incident. The process of enriching the IOCs adds contextual information to gain meaningful insights. Security events can enriched with contextual information from user directories, asset inventory tools (such as CMDB), geolocation tools, third party threat intelligence databases, and a host of other sources.  
+We can apply data enrichments in the form of :(*)  
+using WHOIS to lookup IPs and domains with  
+Looking up Hash reputation with Cymru
+URL extension with Unshorten.me  
+Possibly narrowing down the identity of the attacker.
+
+(*) source: https://blog.rapid7.com/2019/10/24/accelerating-incident-response-with-threat-intelligence-and-alert-enrichment/
+
 
 2. Additional IOCs for the same malware could be obtained from threat repositories like ```virustotal.com```. I noticed that I was able to key in the SHA-1 hash and from the malware information page, obtain SHA-256 hashes and other information. A scraping effort could be undertaken to collect these additional information, and VirusTotal also offers an low-rate API for free users.  
 
-Research links:  
-https://www.securonix.com/data-enrichment-the-key-ingredient-for-siem-success/  
-The process of data enrichment adds event and non-event contextual information to security event data in order to transform raw data into meaningful insights. 
-
-The process of data enrichment adds event and non-event contextual information to security event data in order to transform raw data into meaningful insights. Security events can enriched with contextual information from user directories, asset inventory tools (such as CMDB), geolocation tools, third party threat intelligence databases, and a host of other sources.
-
-https://www.sans.org/reading-room/whitepapers/forensics/ioc-indicators-compromise-malware-forensics-34200
-https://blog.demisto.com/security-orchestration-use-case-automating-ioc-enrichment 
-https://blog.rapid7.com/2019/10/24/accelerating-incident-response-with-threat-intelligence-and-alert-enrichment/
-The alert enrichment workflow in InsightIDR leverages open source threat intelligence to look up:
-
-    IPs and domains with WHOIS
-    DNS with Dig
-    Hash reputation with Cymru
-    URL extension with Unshorten.me
-This additional context can be extremely helpful during the investigation process to narrow in on the threat actors at play.
-
-https://blogs.gartner.com/anton-chuvakin/2014/02/19/how-to-make-better-threat-intelligence-out-of-threat-intelligence-data/
-https://github.com/eCrimeLabs/vt2misp
-https://community.sophos.com/kb/en-us/128136#understanding
-
-### B. Cyber Threat Analysis
+## C. Cyber Threat Analysis
 Analytics Development
 1. Design an algorithm to shortlist IPs that could be running reconnaissance activities against an enterprise web server. State any assumption you make in your design. Use the dataset in the following link to develop a prototype of the algorithm.  
 https://www.secrepo.com/maccdc2012/http.log.gz
