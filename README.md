@@ -2,11 +2,12 @@
 
 Setup environment notes:  
 The environment can be replicated by using the conda environment.yml file included in repo.    
-```conda env create -f environment.yml```  
+```conda env create -f environment.yml``` followed by  
+```conda activate techtest_env```  
 __Note:__ One of the python packages might require additional external tools preinstalled if installing on Windows machine, on top of enviroment.yml
 If conda install of environment throws exception, download build tools from https://visualstudio.microsoft.com/visual-cpp-build-tools/  
 Install the following packages:  
-![](./assets/installcplusplusbuildtools.PNG)
+<img src="./assets/installcplusplusbuildtools.PNG" alt="curve fitting" width="600"/>  
 This is required for pyasn library.
 
 # Test Question
