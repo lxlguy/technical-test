@@ -6,7 +6,7 @@ The environment can be replicated by using the conda environment.yml file includ
 __Note:__ One of the python packages might require additional external tools preinstalled if installing on Windows machine, on top of enviroment.yml
 If conda install of environment throws exception, download build tools from https://visualstudio.microsoft.com/visual-cpp-build-tools/  
 Install the following packages:  
-<img src="./assets/installcplusplusbuildtools.png?raw=true" alt="install c++ build tools" width="600"/>  
+![](./assets/installcplusplusbuildtools.png?raw=true)
 This is required for pyasn library.
 
 ## Test Question
